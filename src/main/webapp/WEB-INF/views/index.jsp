@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>Spring MVC 게시판222</title>
+<title>Spring MVC 게시판5555</title>
 
 <script src="resources/js/jquery-3.2.1.min.js"></script>
 <script src="resources/js/formcheck.js"></script>
