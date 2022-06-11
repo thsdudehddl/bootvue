@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.pinos.demo.dao.MemberDao" >
+
+	
+<select id="memberList" resultMap="domainResultMap" parameterType="map">
+		select * from 
+(select rownum num, name1, sabun, reg_no, hp, pos_gbn_code, TO_CHAR(join_day, 'YYYY-MM-DD') AS join_day, TO_CHAR(retire_day, 'YYYY-MM-DD') AS retire_day, put_yn, salary from 
+(select * from insa 
+where 1=1
+<if test="domain.sabun != 0">and sabun = #{domain.sabun, jdbcType=VARCHAR}</if>
+<if test="domain.name1 != ''">and name1 like '%' || #{domain.name1, jdbcType=VARCHAR} || '%'</if>
+<if test="domain.joinGbnCode != ''">and join_gbn_code like '%' || #{domain.joinGbnCode, jdbcType=VARCHAR} || '%'</if>
+<if test="domain.putYn != ''">and put_yn like '%' || #{domain.putYn, jdbcType=VARCHAR} || '%'</if>
+<if test="domain.jobType != ''">and job_type like '%' || #{domain.jobType, jdbcType=VARCHAR} || '%'</if>
+<if test="domain.posGbnCode != ''">and pos_gbn_code like '%' || #{domain.posGbnCode, jdbcType=VARCHAR} || '%'</if>
+<if test="domain.joinDay != ''">and join_day <![CDATA[ = #{domain.joinDay, jdbcType=VARCHAR}]]></if>
+<if test="domain.retireDay != ''">and retire_day <![CDATA[ = #{domain.retireDay, jdbcType=VARCHAR}]]></if>
+
+		 
+
+order by sabun desc)) 
+where num between #{startRow} and #{endRow}
+		
+	</select>
+	
+	<insert id="insertMember" parameterType="Domain">
+	
+	insert into insa(sabun, name1, eng_name, id1, pwd, phone, hp, reg_no, years1, sex, email, zip, 
+						addr1, addr2, job_type, salary, gart_level, put_yn, mil_yn, mil_type, 
+						mil_level, mil_startdate, mil_enddate, kosa_reg_yn, kosa_class_code, 
+						join_day, retire_day, crm_name, cmp_reg_no, cmp_reg_image, carrier, profile1, self_intro, pos_gbn_code, dept_code, join_gbn_code)
+	values(insa_seq.NEXTVAL, #{name1}, #{engName}, #{id1}, #{pwd}, #{phone}, #{hp}, #{regNo}, #{years1}, 
+				#{sex}, #{email}, #{zip, jdbcType=VARCHAR}, #{addr1}, #{addr2}, #{jobType}, #{salary}, #{gartLevel}, 
+				#{putYn}, #{milYn}, #{milType, jdbcType=VARCHAR}, #{milLevel, jdbcType=VARCHAR}, #{milStartdate, jdbcType=VARCHAR}, #{milEnddate, jdbcType=VARCHAR}, #{kosaRegYn}, #{kosaClassCode, jdbcType=VARCHAR}, 
+				TO_DATE(#{joinDay}, 'yyyy/mm/dd'), #{retireDay}, #{crmName}, #{cmpRegNo}, #{cmpRegImage, jdbcType=VARCHAR}, #{carrier, jdbcType=VARCHAR}, #{profile1, jdbcType=VARCHAR}, #{selfIntro, jdbcType=VARCHAR}, #{posGbnCode}, #{deptCode}, #{joinGbnCode})
+		
+	</insert>
+	
+	<select id="getMemberCount" resultType="int" parameterType="Domain">
+		select
+			count(sabun)
+		from insa	
+		where 1=1
+			<if test="sabun != 0">and sabun = #{sabun, jdbcType=VARCHAR}</if>
+<if test="name1 != ''">and name1 like '%' || #{name1, jdbcType=VARCHAR} || '%'</if>
+<if test="joinGbnCode != ''">and join_gbn_code like '%' || #{joinGbnCode, jdbcType=VARCHAR} || '%'</if>
+<if test="putYn != ''">and put_yn like '%' || #{putYn, jdbcType=VARCHAR} || '%'</if>
+<if test="jobType != ''">and job_type like '%' || #{jobType, jdbcType=VARCHAR} || '%'</if>
+<if test="posGbnCode != ''">and pos_gbn_code like '%' || #{posGbnCode, jdbcType=VARCHAR} || '%'</if>
+<if test="joinDay != ''">and join_day <![CDATA[ = #{joinDay, jdbcType=VARCHAR}]]></if>
+<if test="retireDay != ''">and retire_day <![CDATA[ = #{retireDay, jdbcType=VARCHAR}]]></if>
+
+		 
+	</select>
+	
+	<select id="detailMember" resultType="Domain" resultMap="domainResultMap">
+		select
+		 sabun, name1, eng_name, id1, pwd, phone, hp, reg_no, years1, sex, email, zip, 
+						addr1, addr2, job_type, salary, gart_level, put_yn, mil_yn, mil_type, 
+						mil_level, mil_startdate, mil_enddate, kosa_reg_yn, kosa_class_code, 
+						TO_CHAR(retire_day, 'YYYY-MM-DD') AS retire_day, crm_name, cmp_reg_no, cmp_reg_image, carrier, profile1, self_intro, pos_gbn_code, dept_code, join_gbn_code,
+		 TO_CHAR(join_day, 'YYYY-MM-DD') AS join_day
+		 from insa
+		 where sabun = #{sabun}
+	</select>
+	
+	<update id="updateMember" parameterType="Domain">
+		update insa
+			set sabun = #{sabun}, name1 = #{name1}, eng_name = #{engName}, id1 = #{id1}, phone = #{phone}, hp = #{hp}, 
+					reg_no = #{regNo}, years1 = #{years1}, sex = #{sex}, email = #{email}, zip = #{zip}, addr1 = #{addr1}, 
+					addr2 = #{addr2}, job_type = #{jobType}, salary = #{salary}, gart_level = #{gartLevel}, put_yn = #{putYn}, mil_yn = #{milYn}, 
+					mil_type = #{milType, jdbcType=VARCHAR}, mil_level = #{milLevel, jdbcType=VARCHAR}, mil_startdate = #{milStartdate, jdbcType=VARCHAR}, mil_enddate = #{milEnddate, jdbcType=VARCHAR}, kosa_reg_yn = #{kosaRegYn}, 
+					kosa_class_code = #{kosaClassCode, jdbcType=VARCHAR}, join_day = #{joinDay}, retire_day = #{retireDay}, crm_name = #{crmName}, cmp_reg_no = #{cmpRegNo}, pos_gbn_code = #{posGbnCode}, 
+					cmp_reg_image = #{cmpRegImage, jdbcType=VARCHAR}, carrier = #{carrier, jdbcType=VARCHAR}, profile1 = #{profile1, jdbcType=VARCHAR}, self_intro = #{selfIntro}
+			where sabun = #{sabun}
+	</update>
+	
+	<delete id="deleteMember">
+		delete from insa
+		where sabun = #{sabun}
+	</delete>
+	
+	<select id="join" resultType="domainCom" parameterType="hashmap">
+		SELECT 
+			*
+		FROM insacom
+		where gubun = '01'
+		
+	</select>
+	
+	<select id="pos" resultType="domainCom" parameterType="hashmap">
+		SELECT 
+			*
+		FROM insacom
+		where gubun = '02'
+		
+	</select>
+	
+	<select id="dept" resultType="domainCom" parameterType="hashmap">
+		SELECT 
+			*
+		FROM insacom
+		where gubun = '03'
+		
+	</select>
+	
+	<select id="job" resultType="domainCom" parameterType="hashmap">
+		SELECT 
+			*
+		FROM insacom
+		where gubun = '04'
+		
+	</select>
+	
+	<select id="yn" resultType="domainCom" parameterType="hashmap">
+		SELECT 
+			*
+		FROM insacom
+		where gubun = '05'
+		
+	</select>
+	
+	<select id="milType" resultType="domainCom" parameterType="hashmap">
+		SELECT 
+			*
+		FROM insacom
+		where gubun = '06'
+		
+	</select>
+	
+	<select id="kosaYn" resultType="domainCom" parameterType="hashmap">
+		SELECT 
+			*
+		FROM insacom
+		where gubun = '07'
+		
+	</select>
+	
+	<select id="school" resultType="domainCom" parameterType="hashmap">
+		SELECT 
+			*
+		FROM insacom
+		where gubun = '08'
+		
+	</select>
+	
+	<select id="grade" resultType="domainCom" parameterType="hashmap">
+		SELECT 
+			*
+		FROM insacom
+		where gubun = '09'
+		
+	</select>
+	
+	<select id="kosaGrade" resultType="domainCom" parameterType="hashmap">
+		SELECT 
+			*
+		FROM insacom
+		where gubun = '10'
+		
+	</select>
+	
+	<select id="gender" resultType="domainCom" parameterType="hashmap">
+		SELECT 
+			*
+		FROM insacom
+		where gubun = '11'
+		
+	</select>
+	
+	<select id="milYn" resultType="domainCom" parameterType="hashmap">
+		SELECT 
+			*
+		FROM insacom
+		where gubun = '12'
+		
+	</select>
+	
+	<select id="reprofile" resultType="String">
+		select profile1 from insa where sabun = #{sabun}
+	</select>
+	
+	<select id="recmp" resultType="String">
+		select cmp_reg_image from insa where sabun = #{sabun}
+	</select>
+	
+	<select id="recar" resultType="String">
+		select carrier from insa where sabun = #{sabun}
+	</select>
+	
+	
+	
+	<select id="idChk" parameterType="String" resultType="String">
+		select count(*) from insa where id1 = #{id1}
+	</select>
+	
+	<resultMap id="domainResultMap" type="Domain">
+		<id property="sabun" column="sabun"/>
+		<result property="name1" column="name1"/>
+		<result property="engName" column="eng_name"/>
+		<result property="id1" column="id1"/>
+		<result property="pwd" column="pwd"/>
+		<result property="phone" column="phone"/>
+		<result property="hp" column="hp"/>
+		<result property="regNo" column="reg_no"/>
+		<result property="years1" column="years1"/>
+		<result property="sex" column="sex"/>
+		<result property="email" column="email"/>
+		<result property="zip" column="zip"/>
+		<result property="addr1" column="addr1"/>
+		<result property="addr2" column="addr2"/>
+		<result property="jobType" column="job_type"/>
+		<result property="salary" column="salary"/>
+		<result property="gartLevel" column="gart_level"/>
+		<result property="putYn" column="put_yn"/>
+		<result property="milYn" column="mil_yn"/>
+		<result property="milType" column="mil_type"/>
+		<result property="milLevel" column="mil_level"/>
+		<result property="milStartdate" column="mil_startdate"/>
+		<result property="milEnddate" column="mil_enddate"/>
+		<result property="kosaRegYn" column="kosa_reg_yn"/>
+		<result property="kosaClassCode" column="kosa_class_code"/>
+		<result property="joinDay" column="join_day"/>
+		<result property="retireDay" column="retire_day"/>
+		<result property="crmName" column="crm_name"/>
+		<result property="cmpRegNo" column="cmp_reg_no"/>
+		<result property="cmpRegImage" column="cmp_reg_image"/>
+		<result property="carrier" column="carrier"/>
+		<result property="profile1" column="profile1"/>
+		<result property="selfIntro" column="self_intro"/>
+		<result property="posGbnCode" column="pos_gbn_code"/>
+		<result property="deptCode" column="dept_code"/>
+		<result property="joinGbnCode" column="join_gbn_code"/>
+	</resultMap>
+</mapper>	
+
+
+

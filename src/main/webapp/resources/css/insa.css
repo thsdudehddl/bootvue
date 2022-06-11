@@ -1,0 +1,57 @@
+@charset "UTF-8";
+.justify{
+	display: flex;
+	justify-content : space-around;
+	
+	flex-direction : row;
+	flex-wrap : wrap; 
+	width : 100%;
+	
+}
+
+
+/* .open{ position:absolute; top:50%; left:50%;
+  width:120px; height:30px; margin-top:-15px; margin-left:-60px;
+  line-height:15px; cursor:pointer;
+}*/
+
+.modal{ 
+  position:absolute; width:100%; height:100%; background: rgba(0,0,0,0.8); top:0; left:0; display:none;
+}
+.home{
+	text-align:right;
+}
+
+.func{
+	text-align : right;
+	
+}
+.item{
+	flex : 1 1 20%;
+	/* border : 1px solid red; */
+	
+}
+div{
+	margin:4px;
+	
+}
+span {
+	text-align:left;
+	
+}
+input {
+	text-align:right;
+}
+select {
+	width:150px;
+}
+.between {
+	display: flex;
+	justify-content : space-between;
+	
+	flex-direction : row;
+	flex-wrap : wrap;
+	flex : 1 1 50%;
+	
+	/* border : 1px solid blue; */
+}
