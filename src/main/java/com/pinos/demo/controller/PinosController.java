@@ -63,7 +63,7 @@ public class PinosController {
 		domain.setPosGbnCode(posGbnCode);
 		domain.setJoinDay(joinDay);
 		domain.setRetireDay(retireDay);
-		
+		System.out.println("하하하");
 		System.out.println("컨트롤 입사" + joinDay);
 		System.out.println("ㅇㅇ" + domain.getJoinDay());
 		
